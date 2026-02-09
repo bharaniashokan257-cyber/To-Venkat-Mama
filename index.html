@@ -1,78 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Valentine Question</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Questions</title>
 
-        .card {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            text-align: center;
-            width: 320px;
-        }
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
 
-        h1 {
-            font-size: 24px;
-            margin-bottom: 30px;
-        }
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    text-align: center;
+    width: 360px;
+}
 
-        button {
-            padding: 12px 25px;
-            margin: 10px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            cursor: pointer;
-        }
+button {
+    padding: 12px 25px;
+    margin: 10px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
 
-        .yes {
-            background-color: #ff4d6d;
-            color: white;
-        }
+.yes { background: #ff4d6d; color: white; }
+.no { background: #6c757d; color: white; }
 
-        .no {
-            background-color: #6c757d;
-            color: white;
-        }
+input[type=range] {
+    width: 100%;
+}
 
-        #result {
-            margin-top: 20px;
-            font-size: 20px;
-            font-weight: bold;
-        }
-    </style>
+.teddy-area {
+    display: none;
+    margin-top: 20px;
+}
+
+.teddy {
+    font-size: 60px;
+    cursor: pointer;
+    margin: 10px;
+    display: inline-block;
+    transition: transform 1s;
+}
+
+#result {
+    margin-top: 15px;
+    font-size: 20px;
+    font-weight: bold;
+}
+</style>
 </head>
+
 <body>
 
 <div class="card">
-    <h1>Will you be my Valentine? ❤️</h1>
-    <button class="yes" onclick="sayYes()">YES</button>
-    <button class="no" onclick="sayNo()">NO</button>
 
-    <div id="result"></div>
+<h2 id="question">Will you be my Valentine? ❤️</h2>
+
+<div id="yesNoButtons">
+    <button class="yes" onclick="q1Yes()">YES</button>
+    <button class="no" onclick="q1No()">NO</button>
+</div>
+
+<div id="loveRangeSection" style="display:none">
+    <h3>Enna unaku evlo pudikum? 💕</h3>
+    <input type="range" min="0" max="100" value="0" id="loveRange" oninput="checkLove()">
+    <div id="rangeValue">0</div>
+</div>
+
+<div id="teddySection" class="teddy-area">
+    <h3>Will you hug me? 🤗</h3>
+    <div>
+        <span id="boy" class="teddy">🧸</span>
+        <span id="girl" class="teddy" onclick="hugAction()">🧸</span>
+    </div>
+</div>
+
+<div id="result"></div>
+
 </div>
 
 <script>
-    function sayYes() {
-        document.getElementById('result').innerText = "Love you mama ❤️";
-    }
 
-    function sayNo() {
-        document.getElementById('result').innerText = "No please 😢";
+function q1Yes(){
+    document.getElementById("result").innerText="Love you mama ❤️";
+    document.getElementById("yesNoButtons").style.display="none";
+    document.getElementById("loveRangeSection").style.display="block";
+}
+
+function q1No(){
+    document.getElementById("result").innerText="No please 😢";
+}
+
+function checkLove(){
+    let val=document.getElementById("loveRange").value;
+    document.getElementById("rangeValue").innerText=val;
+
+    if(val<50){
+        document.getElementById("result").innerText="Ne setha nu 😡";
     }
+    else if(val>=50 && val<60){
+        document.getElementById("result").innerText="Like you 💕";
+    }
+    else if(val>=60 && val<70){
+        document.getElementById("result").innerText="Like you more 💖";
+    }
+    else if(val>=70 && val<80){
+        document.getElementById("result").innerText="Okay 😌";
+    }
+    else if(val>=80 && val<90){
+        document.getElementById("result").innerText="Mmmmk 😍";
+    }
+    else if(val>=90 && val<100){
+        document.getElementById("result").innerText="Sari ❤️";
+    }
+    else if(val==100){
+        document.getElementById("result").innerText="Love you da purusha 💘";
+        setTimeout(()=>{
+            document.getElementById("loveRangeSection").style.display="none";
+            document.getElementById("teddySection").style.display="block";
+            document.getElementById("result").innerText="";
+        },1500);
+    }
+}
+
+function hugAction(){
+    document.getElementById("boy").style.transform="translateX(40px)";
+    setTimeout(()=>{
+        document.getElementById("result").innerText="Hug 🤗 Kiss 😘 Love you ammu ❤️";
+    },1000);
+}
+
 </script>
 
 </body>
