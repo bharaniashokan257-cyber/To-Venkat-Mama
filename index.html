@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine Questions</title>
+<title>Love Page</title>
 
 <style>
 body {
@@ -14,6 +14,7 @@ body {
     justify-content: center;
     align-items: center;
     margin: 0;
+    overflow: hidden;
 }
 
 .card {
@@ -22,7 +23,8 @@ body {
     border-radius: 20px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     text-align: center;
-    width: 360px;
+    width: 380px;
+    position: relative;
 }
 
 button {
@@ -37,21 +39,32 @@ button {
 .yes { background: #ff4d6d; color: white; }
 .no { background: #6c757d; color: white; }
 
-input[type=range] {
-    width: 100%;
-}
-
 .teddy-area {
     display: none;
     margin-top: 20px;
+    position: relative;
+    height: 160px;
 }
 
 .teddy {
-    font-size: 60px;
-    cursor: pointer;
-    margin: 10px;
-    display: inline-block;
-    transition: transform 1s;
+    width: 120px;
+    position: absolute;
+    transition: all 2s ease;
+}
+
+#boy { left: 10px; }
+#girl { right: 10px; cursor: pointer; }
+
+.heart {
+    position: absolute;
+    color: red;
+    font-size: 24px;
+    animation: floatUp 2s linear forwards;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0); opacity:1 }
+    100% { transform: translateY(-200px); opacity:0 }
 }
 
 #result {
@@ -59,6 +72,7 @@ input[type=range] {
     font-size: 20px;
     font-weight: bold;
 }
+
 </style>
 </head>
 
@@ -69,22 +83,16 @@ input[type=range] {
 <h2 id="question">Will you be my Valentine? ❤️</h2>
 
 <div id="yesNoButtons">
-    <button class="yes" onclick="q1Yes()">YES</button>
-    <button class="no" onclick="q1No()">NO</button>
-</div>
-
-<div id="loveRangeSection" style="display:none">
-    <h3>Enna unaku evlo pudikum? 💕</h3>
-    <input type="range" min="0" max="100" value="0" id="loveRange" oninput="checkLove()">
-    <div id="rangeValue">0</div>
+    <button class="yes" onclick="startTeddy()">YES</button>
+    <button class="no" onclick="noClick()">NO</button>
 </div>
 
 <div id="teddySection" class="teddy-area">
     <h3>Will you hug me? 🤗</h3>
-    <div>
-        <span id="boy" class="teddy">🧸</span>
-        <span id="girl" class="teddy" onclick="hugAction()">🧸</span>
-    </div>
+
+    <!-- Replace these image links with your uploaded teddy images if needed -->
+    <img id="boy" class="teddy" src="https://i.imgur.com/4AiXzf8.png">
+    <img id="girl" class="teddy" src="https://i.imgur.com/4AiXzf8.png" onclick="hugAction()">
 </div>
 
 <div id="result"></div>
@@ -93,53 +101,51 @@ input[type=range] {
 
 <script>
 
-function q1Yes(){
-    document.getElementById("result").innerText="Love you mama ❤️";
+function startTeddy(){
     document.getElementById("yesNoButtons").style.display="none";
-    document.getElementById("loveRangeSection").style.display="block";
+    document.getElementById("teddySection").style.display="block";
 }
 
-function q1No(){
+function noClick(){
     document.getElementById("result").innerText="No please 😢";
 }
 
-function checkLove(){
-    let val=document.getElementById("loveRange").value;
-    document.getElementById("rangeValue").innerText=val;
+function hugAction(){
+    let boy=document.getElementById("boy");
+    let girl=document.getElementById("girl");
 
-    if(val<50){
-        document.getElementById("result").innerText="Ne setha nu 😡";
-    }
-    else if(val>=50 && val<60){
-        document.getElementById("result").innerText="Like you 💕";
-    }
-    else if(val>=60 && val<70){
-        document.getElementById("result").innerText="Like you more 💖";
-    }
-    else if(val>=70 && val<80){
-        document.getElementById("result").innerText="Okay 😌";
-    }
-    else if(val>=80 && val<90){
-        document.getElementById("result").innerText="Mmmmk 😍";
-    }
-    else if(val>=90 && val<100){
-        document.getElementById("result").innerText="Sari ❤️";
-    }
-    else if(val==100){
-        document.getElementById("result").innerText="Love you da purusha 💘";
-        setTimeout(()=>{
-            document.getElementById("loveRangeSection").style.display="none";
-            document.getElementById("teddySection").style.display="block";
-            document.getElementById("result").innerText="";
-        },1500);
+    // Boy run to girl
+    boy.style.left="45%";
+
+    setTimeout(()=>{
+        showHearts();
+        speakBoy();
+        setTimeout(speakGirl,2000);
+        document.getElementById("result").innerText="Hug 🤗 Kiss 😘 Love you ammu ❤️";
+    },2000);
+}
+
+function showHearts(){
+    for(let i=0;i<15;i++){
+        let heart=document.createElement("div");
+        heart.className="heart";
+        heart.innerHTML="❤️";
+        heart.style.left=Math.random()*100+"%";
+        heart.style.top="70%";
+        document.body.appendChild(heart);
+
+        setTimeout(()=>heart.remove(),2000);
     }
 }
 
-function hugAction(){
-    document.getElementById("boy").style.transform="translateX(40px)";
-    setTimeout(()=>{
-        document.getElementById("result").innerText="Hug 🤗 Kiss 😘 Love you ammu ❤️";
-    },1000);
+function speakBoy(){
+    let msg=new SpeechSynthesisUtterance("Love you Ammu");
+    speechSynthesis.speak(msg);
+}
+
+function speakGirl(){
+    let msg=new SpeechSynthesisUtterance("Love you Mama");
+    speechSynthesis.speak(msg);
 }
 
 </script>
